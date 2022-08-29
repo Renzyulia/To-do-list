@@ -10,6 +10,7 @@ import UIKit
 class ViewController: UIViewController {
   
   let identifireCell = "CellToThing"
+  var things: [String] = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -20,6 +21,25 @@ class ViewController: UIViewController {
     configureTableView()
     configureMotivationLabel()
     
+  }
+
+  @IBAction func saveThingButton(_ sender: UIBarButtonItem) {
+    let alertController = UIAlertController(title: "New thing", message: "Add what you need to do", preferredStyle: .alert)
+    let saveAction = UIAlertAction(title: "Save", style: .default) { action in
+      let textField = alertController.textFields?.first
+      if let newThing = textField?.text {
+        self.things.insert(newThing, at: 0)
+      }
+    }
+
+    alertController.addTextField { _ in }
+
+    let canselAction = UIAlertAction(title: "Cancel", style: .default) { _ in }
+
+    alertController.addAction(saveAction)
+    alertController.addAction(canselAction)
+
+    present(alertController, animated: true, completion: nil)
   }
   
   func configureTitleLabel() {
@@ -72,12 +92,13 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 10
+    return things.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: identifireCell, for: indexPath) as! MyTableViewCell
-    cell.configure(text: "buy products", image: UIImage(named: "DoneIcon")!)
+    let text = things[indexPath.row]
+    cell.configure(text: text, image: UIImage(named: "DoneIcon")!)
     return cell
   }
 }
