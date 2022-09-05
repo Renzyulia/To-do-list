@@ -16,6 +16,7 @@
 		A3A6C97728BCDC70000DFA7C /* ModelCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A3A6C97528BCDC70000DFA7C /* ModelCoreData.xcdatamodeld */; };
 		A3A6C97A28BCEC9D000DFA7C /* Things+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A6C97828BCEC9D000DFA7C /* Things+CoreDataClass.swift */; };
 		A3A6C97B28BCEC9D000DFA7C /* Things+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A6C97928BCEC9D000DFA7C /* Things+CoreDataProperties.swift */; };
+		A3AF830F28C1269F000549AB /* addingNewThingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3AF830E28C1269F000549AB /* addingNewThingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		A3A6C97628BCDC70000DFA7C /* ModelCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ModelCoreData.xcdatamodel; sourceTree = "<group>"; };
 		A3A6C97828BCEC9D000DFA7C /* Things+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Things+CoreDataClass.swift"; path = "To-do list/Things+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A3A6C97928BCEC9D000DFA7C /* Things+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Things+CoreDataProperties.swift"; path = "To-do list/Things+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A3AF830E28C1269F000549AB /* addingNewThingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addingNewThingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				A3678BFE28AFC1F600F18D35 /* Assets.xcassets */,
 				A3678C0028AFC1F600F18D35 /* LaunchScreen.storyboard */,
 				A3678C0328AFC1F600F18D35 /* Info.plist */,
+				A3AF830E28C1269F000549AB /* addingNewThingViewController.swift */,
 			);
 			path = "To-do list";
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 				A3678BF628AFC1F300F18D35 /* AppDelegate.swift in Sources */,
 				A3A6C97B28BCEC9D000DFA7C /* Things+CoreDataProperties.swift in Sources */,
 				A3A6C97728BCDC70000DFA7C /* ModelCoreData.xcdatamodeld in Sources */,
+				A3AF830F28C1269F000549AB /* addingNewThingViewController.swift in Sources */,
 				A3678BF828AFC1F300F18D35 /* SceneDelegate.swift in Sources */,
 				A3A6C97A28BCEC9D000DFA7C /* Things+CoreDataClass.swift in Sources */,
 			);

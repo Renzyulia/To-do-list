@@ -10,15 +10,16 @@ import Foundation
 import CoreData
 
 
-extension Things {
+extension Thing {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Things> {
-        return NSFetchRequest<Things>(entityName: "Things")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Thing> {
+        return NSFetchRequest<Thing>(entityName: "Thing")
     }
 
     @NSManaged public var title: String?
-    @NSManaged public var runTime: Date?
-    @NSManaged public var executionStatus: Bool
+    @NSManaged public var data: Date?
+    @NSManaged public var thingDone: Bool
     @NSManaged public var notes: String?
+  
 
 }
