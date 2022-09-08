@@ -13,7 +13,6 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
   let datePicker = UIDatePicker()
   let notesTF = UITextField()
   let thingDoneDefault = false
-//  let datePicker = UIDatePicker()
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -23,8 +22,6 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     configureLabelTF()
     configureTitleTF()
     configureDatePicker()
-//    createDatePicker()
-//    getDataFromPicker()
     configureNotesTF()
     configureSaveButton()
     configureCancelButton()
@@ -75,32 +72,6 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
                                  datePicker.heightAnchor.constraint(equalToConstant: 44)])
   }
   
-//  func createDatePicker() {
-//    dataTF.inputView = datePicker
-//    datePicker.datePickerMode = .date
-//
-//    let toolbar = UIToolbar()
-//    toolbar.sizeToFit()
-//    let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneAction))
-//    let spaceOfButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-//    toolbar.setItems([spaceOfButton, doneButton], animated: true)
-//    dataTF.inputAccessoryView = toolbar
-//    let defaultDate = Calendar.current.date(byAdding: .day, value: 0, to: Date())
-//    datePicker.minimumDate = defaultDate
-//  }
-//
-//  @objc func doneAction() {
-//    getDataFromPicker()
-//    view.endEditing(true)
-//  }
-//
-//  func getDataFromPicker() {
-//    let formatter = DateFormatter()
-//    formatter.dateFormat = "dd.MM.yyyy"
-//    dataTF.text = formatter.string(from: datePicker.date)
-//
-//  }
-  
   func configureNotesTF() {
     notesTF.placeholder = "notes"
     notesTF.font = UIFont.systemFont(ofSize: 15)
@@ -147,8 +118,9 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     do {
       try context.save()
     } catch {
-      fatalError("cannot save value")
+      fatalError("cannot save the object")
     }
+    self.dismiss(animated: true, completion: nil)
   }
   
   func configureCancelButton() {

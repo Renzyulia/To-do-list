@@ -14,14 +14,6 @@
                     <view key="view" contentMode="scaleToFill" id="f7s-yC-hvB" customClass="viewController">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Mm-bA-pnz">
-                                <rect key="frame" x="146" y="417" width="120" height="47"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6zG-Gi-MUy"/>
                         <color key="backgroundColor" red="0.8687658922" green="0.73690149199999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>

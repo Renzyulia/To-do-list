@@ -8,24 +8,46 @@
 import UIKit
 import CoreData
 
+extension Date {
+  var startOfDay: Date {
+    return Calendar.current.startOfDay(for: self)
+  }
+  
+  var endOfDay: Date {
+    var dateComponents = DateComponents()
+    dateComponents.day = 1
+    dateComponents.second = -1
+    return Calendar.current.date(byAdding: dateComponents, to: startOfDay)!
+  }
+}
+
 class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
   
   let identifireCell = "CellToThing"
   var fetchResultsController: NSFetchedResultsController<Thing>?
-  let addingNewThingViewController = AddingNewThingViewController()
+  let date = Date()
+  
   
   func getThingsFromDataBases() {
     let context = CoreData.shared.viewContext
     let fetchRequest = Thing.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(key: "data", ascending: true)]
+    let predicate = NSPredicate(format: "data >= %@ AND data <= %@", date.startOfDay as CVarArg, date.endOfDay as CVarArg)
+    fetchRequest.predicate = predicate
     let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
     self.fetchResultsController = controller
+    controller.delegate = self
     do {
         try controller.performFetch()
     } catch {
         fatalError("Failed to fetch entities: \(error)")
     }
   }
+  
+  func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    myTableView.reloadData()
+  }
+  
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -54,9 +76,11 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
     titleLable.topAnchor.constraint(equalTo: view.topAnchor, constant: 110).isActive = true
   }
   
+  private var myTableView = UITableView()
+  
   func configureTableView() {
-    let myTableView = UITableView()
     myTableView.register(MyTableViewCell.self, forCellReuseIdentifier: identifireCell)
+    myTableView.backgroundColor = UIColor.clear
     myTableView.dataSource = self
     myTableView.delegate = self
     
@@ -101,8 +125,10 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
   }
   
   @objc func add() {
+    let addingNewThingViewController = AddingNewThingViewController()
     self.present(addingNewThingViewController, animated: true, completion: nil)
   }
+  
 }
 
 extension ViewController: UITableViewDataSource {
@@ -128,13 +154,58 @@ extension ViewController: UITableViewDataSource {
       fatalError("Attempt to configure cell without a managed object")
     }
     let text = object.title
-    cell.configure(text: text!, image: UIImage(named: "DoneIcon")!)
+    if object.thingDone == false {
+      cell.configure(text: text!, image: UIImage(named: "NewThingIcon")!)
+    } else {
+      cell.configure(text: text!, image: UIImage(named: "DoneThingIcon")!)
+    }
     return cell
   }
 }
 
 extension ViewController: UITableViewDelegate {
   
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let context = CoreData.shared.viewContext
+    guard let object = self.fetchResultsController?.object(at: indexPath) else { return }
+      if object.thingDone == true {
+        object.thingDone = false
+      } else {
+      object.thingDone = true
+      }
+    do {
+      try context.save()
+    } catch {
+      fatalError("cannot save the object")
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    return 60
+  }
+  
+  func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: {
+      suggestedActions in
+      let deleteAction = UIAction(title: NSLocalizedString("DeleteThing", comment: ""),
+                                  image: UIImage(systemName: "trash"),
+                                  attributes: .destructive) { action in
+        self.deleteThing(indexPath: indexPath)
+         }
+      return UIMenu(title: "", children: [deleteAction])
+    })
+  }
+  
+  func deleteThing(indexPath: IndexPath) {
+    let context = CoreData.shared.viewContext
+    let object = self.fetchResultsController?.object(at: indexPath)
+    context.delete(object!)
+    do {
+      try context.save()
+    } catch {
+      fatalError("cannot save the object")
+    }
+  }
 }
 
 class CoreData {
@@ -177,11 +248,12 @@ class MyTableViewCell: UITableViewCell {
     statusButton.translatesAutoresizingMaskIntoConstraints = false
     textField.translatesAutoresizingMaskIntoConstraints = false
     
-    statusButton.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-    statusButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-    statusButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 1).isActive = true
-    statusButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
-    statusButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+    statusButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
+//    statusButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 5).isActive = true
+    statusButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -15).isActive = true
+    statusButton.widthAnchor.constraint(equalToConstant: 20).isActive = true
+    statusButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
+
     
     textField.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
     textField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
