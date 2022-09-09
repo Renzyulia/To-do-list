@@ -5,31 +5,30 @@
 //  Created by Julia on 01/09/2022.
 //
 
-import Foundation
 import UIKit
 
 class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
-  let titleTF = UITextField()
-  let datePicker = UIDatePicker()
-  let notesTF = UITextField()
-  let thingDoneDefault = false
+  
+ private let titleTextField = UITextField()
+ private let datePicker = UIDatePicker()
+ private let notesTextField = UITextField()
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    view.backgroundColor = #colorLiteral(red: 0.6961900969, green: 0.6364083905, blue: 1, alpha: 1)
+    view.backgroundColor = UIColor(named: "BackgroundColor")
     
-    configureLabelTF()
-    configureTitleTF()
+    configureLabelTextField()
+    configureTitleTextField()
     configureDatePicker()
-    configureNotesTF()
+    configureNotesTextField()
     configureSaveButton()
     configureCancelButton()
   }
   
-  func configureLabelTF() {
+ private func configureLabelTextField() {
     let label = UILabel()
-    label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+    label.font = .systemFont(ofSize: 25, weight: .medium)
     label.textColor = .black
     label.textAlignment = .center
     label.text = "Add new thing"
@@ -41,29 +40,28 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
                                  label.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)])
   }
   
-  func configureTitleTF() {
-    titleTF.placeholder = "what need to do"
-    titleTF.font = UIFont.systemFont(ofSize: 15)
-    titleTF.borderStyle = UITextField.BorderStyle.roundedRect
-    titleTF.autocorrectionType = UITextAutocorrectionType.no
-    titleTF.keyboardType = UIKeyboardType.default
-    titleTF.returnKeyType = UIReturnKeyType.done
-    titleTF.clearButtonMode = UITextField.ViewMode.whileEditing
-    titleTF.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-    titleTF.delegate = self
+ private func configureTitleTextField() {
+    titleTextField.placeholder = "what need to do"
+    titleTextField.font = .systemFont(ofSize: 15)
+    titleTextField.borderStyle = .roundedRect
+    titleTextField.autocorrectionType = .no
+    titleTextField.keyboardType = .default
+    titleTextField.returnKeyType = .done
+    titleTextField.clearButtonMode = .whileEditing
+    titleTextField.contentVerticalAlignment = .center
+    titleTextField.delegate = self
     
-    self.view.addSubview(titleTF)
+    view.addSubview(titleTextField)
     
-    titleTF.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([titleTF.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 titleTF.topAnchor.constraint(equalTo: view.topAnchor, constant: 200),
-                                 titleTF.widthAnchor.constraint(equalToConstant: 300),
-                                 titleTF.heightAnchor.constraint(equalToConstant: 44)])
+    titleTextField.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([titleTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                                 titleTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 200),
+                                 titleTextField.widthAnchor.constraint(equalToConstant: 300)])
   }
   
-  func configureDatePicker() {
+ private func configureDatePicker() {
     
-    self.view.addSubview(datePicker)
+    view.addSubview(datePicker)
     
     datePicker.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([datePicker.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -72,34 +70,34 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
                                  datePicker.heightAnchor.constraint(equalToConstant: 44)])
   }
   
-  func configureNotesTF() {
-    notesTF.placeholder = "notes"
-    notesTF.font = UIFont.systemFont(ofSize: 15)
-    notesTF.borderStyle = UITextField.BorderStyle.roundedRect
-    notesTF.autocorrectionType = UITextAutocorrectionType.no
-    notesTF.keyboardType = UIKeyboardType.phonePad
-    notesTF.returnKeyType = UIReturnKeyType.done
-    notesTF.clearButtonMode = UITextField.ViewMode.whileEditing
-    notesTF.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-    notesTF.delegate = self
+ private func configureNotesTextField() {
+    notesTextField.placeholder = "notes"
+    notesTextField.font = .systemFont(ofSize: 15)
+    notesTextField.borderStyle = .roundedRect
+    notesTextField.autocorrectionType = .no
+    notesTextField.keyboardType = .phonePad
+    notesTextField.returnKeyType = .done
+    notesTextField.clearButtonMode = .whileEditing
+    notesTextField.contentVerticalAlignment = .center
+    notesTextField.delegate = self
     
-    self.view.addSubview(notesTF)
+    view.addSubview(notesTextField)
     
-    notesTF.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([notesTF.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 notesTF.topAnchor.constraint(equalTo: view.topAnchor, constant: 300),
-                                 notesTF.widthAnchor.constraint(equalToConstant: 300),
-                                 notesTF.heightAnchor.constraint(equalToConstant: 130)])
+    notesTextField.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([notesTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                                 notesTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 300),
+                                 notesTextField.widthAnchor.constraint(equalToConstant: 300),
+                                 notesTextField.heightAnchor.constraint(equalToConstant: 130)])
   }
   
-  func configureSaveButton() {
+ private func configureSaveButton() {
     let saveButton = UIButton()
     saveButton.backgroundColor = .white
     saveButton.setTitle("Save", for: .normal)
-    saveButton.setTitleColor(UIColor.black, for: .normal)
+    saveButton.setTitleColor(.black, for: .normal)
     saveButton.addTarget(self, action: #selector(save), for: .touchUpInside)
     
-    self.view.addSubview(saveButton)
+    view.addSubview(saveButton)
 
     saveButton.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -250),
@@ -108,29 +106,29 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
                                  saveButton.heightAnchor.constraint(equalToConstant: 50)])
   }
   
-  @objc func save() {
+  @objc private func save() {
     let context = CoreData.shared.viewContext
     let object = Thing(context: context)
-    object.title = titleTF.text
+    object.title = titleTextField.text
     object.data = datePicker.date
     object.thingDone = false
-    object.notes = notesTF.text
+    object.notes = notesTextField.text
     do {
       try context.save()
     } catch {
       fatalError("cannot save the object")
     }
-    self.dismiss(animated: true, completion: nil)
+    dismiss(animated: true, completion: nil)
   }
   
-  func configureCancelButton() {
+ private func configureCancelButton() {
     let cancelButton = UIButton()
     cancelButton.backgroundColor = .white
     cancelButton.setTitle("Cancel", for: .normal)
-    cancelButton.setTitleColor(UIColor.black, for: .normal)
+    cancelButton.setTitleColor(.black, for: .normal)
     cancelButton.addTarget(self, action: #selector(cancel), for: .touchUpInside)
     
-    self.view.addSubview(cancelButton)
+    view.addSubview(cancelButton)
 
     cancelButton.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -250),
@@ -139,8 +137,8 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
                                  cancelButton.heightAnchor.constraint(equalToConstant: 50)])
   }
   
-  @objc func cancel() {
-    self.dismiss(animated: true, completion: nil)
+  @objc private func cancel() {
+    dismiss(animated: true, completion: nil)
   }
 }
 

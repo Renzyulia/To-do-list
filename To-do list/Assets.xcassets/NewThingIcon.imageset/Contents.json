@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "NewThingIcon.png",
+      "filename" : "NewThingIcon.svg.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "NewThingIcon-1.png",
+      "filename" : "NewThingIcon.svg-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "NewThingIcon-2.png",
+      "filename" : "NewThingIcon.svg-2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
