@@ -6,46 +6,64 @@
 //
 
 import UIKit
+import CoreData
 
-class ViewController: UIViewController {
+extension Date {
+  var startOfDay: Date {
+    return Calendar.current.startOfDay(for: self)
+  }
   
-  let identifireCell = "CellToThing"
-  var things: [String] = []
+  var endOfDay: Date {
+    var dateComponents = DateComponents()
+    dateComponents.day = 1
+    dateComponents.second = -1
+    return Calendar.current.date(byAdding: dateComponents, to: startOfDay)!
+  }
+}
+
+class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
+  
+  private let identifireCell = "CellToThing"
+  private let date = Date()
+  private var contentTableView = UITableView()
+  private var fetchResultsController: NSFetchedResultsController<Thing>?
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    view.backgroundColor = #colorLiteral(red: 0.6961900969, green: 0.6364083905, blue: 1, alpha: 1)
+    view.backgroundColor = UIColor(named: "BackgroundColor")
+    
+    getThingsFromDataBases()
     
     configureTitleLabel()
     configureTableView()
     configureMotivationLabel()
-    
-  }
-
-  @IBAction func saveThingButton(_ sender: UIBarButtonItem) {
-    let alertController = UIAlertController(title: "New thing", message: "Add what you need to do", preferredStyle: .alert)
-    let saveAction = UIAlertAction(title: "Save", style: .default) { action in
-      let textField = alertController.textFields?.first
-      if let newThing = textField?.text {
-        self.things.insert(newThing, at: 0)
-      }
-    }
-
-    alertController.addTextField { _ in }
-
-    let canselAction = UIAlertAction(title: "Cancel", style: .default) { _ in }
-
-    alertController.addAction(saveAction)
-    alertController.addAction(canselAction)
-
-    present(alertController, animated: true, completion: nil)
+    configureAddButton()
   }
   
-  func configureTitleLabel() {
-//    let titleLable = UILabel(frame: CGRect(x: 125.5, y: 115, width: 163, height: 36))
+  func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    contentTableView.reloadData()
+  }
+  
+  private func getThingsFromDataBases() {
+    let context = CoreData.shared.viewContext
+    let fetchRequest = Thing.fetchRequest()
+    fetchRequest.sortDescriptors = [NSSortDescriptor(key: "data", ascending: true)]
+    let predicate = NSPredicate(format: "data >= %@ AND data <= %@", date.startOfDay as CVarArg, date.endOfDay as CVarArg)
+    fetchRequest.predicate = predicate
+    let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+    self.fetchResultsController = controller
+    controller.delegate = self
+    do {
+        try controller.performFetch()
+    } catch {
+        fatalError("Failed to fetch entities: \(error)")
+    }
+  }
+  
+  private func configureTitleLabel() {
     let titleLable = UILabel()
-    titleLable.font = UIFont.systemFont(ofSize: 30, weight: .medium)
+    titleLable.font = .systemFont(ofSize: 30, weight: .medium)
     titleLable.textColor = .black
     titleLable.textAlignment = .center
     titleLable.text = "TO-DO LIST"
@@ -53,30 +71,28 @@ class ViewController: UIViewController {
     view.addSubview(titleLable)
     
     titleLable.translatesAutoresizingMaskIntoConstraints = false
-    titleLable.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-    titleLable.topAnchor.constraint(equalTo: view.topAnchor, constant: 110).isActive = true
+    NSLayoutConstraint.activate([titleLable.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                                 titleLable.topAnchor.constraint(equalTo: view.topAnchor, constant: 110)])
   }
   
-  func configureTableView() {
-//    let myTableView = UITableView(frame: CGRect(x: 32, y: 201, width: 351, height: 465))
-    let myTableView = UITableView()
-    myTableView.register(MyTableViewCell.self, forCellReuseIdentifier: identifireCell)
-    myTableView.dataSource = self
-    myTableView.delegate = self
+  private func configureTableView() {
+    contentTableView.register(MyTableViewCell.self, forCellReuseIdentifier: identifireCell)
+    contentTableView.backgroundColor = .clear
+    contentTableView.dataSource = self
+    contentTableView.delegate = self
     
-    view.addSubview(myTableView)
+    view.addSubview(contentTableView)
     
-    myTableView.translatesAutoresizingMaskIntoConstraints = false
-    myTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -31).isActive = true
-    myTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 32).isActive = true
-    myTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 210).isActive = true
-    myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -240).isActive = true
+    contentTableView.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([contentTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -31),
+                                 contentTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 32),
+                                 contentTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 210),
+                                 contentTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -240)])
   }
   
-  func configureMotivationLabel() {
-//    let motivationalLabel = UILabel(frame: CGRect(x: 126.5, y: 751, width: 161, height: 30))
+  private func configureMotivationLabel() {
     let motivationalLabel = UILabel()
-    motivationalLabel.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+    motivationalLabel.font = .systemFont(ofSize: 25, weight: .medium)
     motivationalLabel.textColor = .black
     motivationalLabel.textAlignment = .center
     motivationalLabel.text = "You are great!"
@@ -84,27 +100,134 @@ class ViewController: UIViewController {
     view.addSubview(motivationalLabel)
     
     motivationalLabel.translatesAutoresizingMaskIntoConstraints = false
-    motivationalLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-    motivationalLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -110).isActive = true
+    NSLayoutConstraint.activate([motivationalLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                                 motivationalLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -110)])
   }
+  
+  private func configureAddButton() {
+    let addButton = UIButton()
+    
+    addButton.backgroundColor = UIColor(named: "BackgroundColor")
+    
+    addButton.setTitle("Add", for: .normal)
+    addButton.setTitleColor(.black, for: .normal)
+    addButton.addTarget(self, action: #selector(add), for: .touchUpInside)
+    
+    self.view.addSubview(addButton)
+    
+    addButton.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10),
+                                 addButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+                                 addButton.widthAnchor.constraint(equalToConstant: 80),
+                                 addButton.heightAnchor.constraint(equalToConstant: 60)])
+  }
+  
+  @objc private func add() {
+    let addingNewThingViewController = AddingNewThingViewController()
+    self.present(addingNewThingViewController, animated: true, completion: nil)
+  }
+  
 }
 
 extension ViewController: UITableViewDataSource {
   
+  func numberOfSections(in tableView: UITableView) -> Int {
+    if let frc = fetchResultsController {
+        return frc.sections!.count
+    }
+    return 0
+  }
+  
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return things.count
+    guard let sections = self.fetchResultsController?.sections else {
+      fatalError("No sections in fetchedResultsController")
+    }
+    let sectionInfo = sections[section]
+    return sectionInfo.numberOfObjects
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: identifireCell, for: indexPath) as! MyTableViewCell
-    let text = things[indexPath.row]
-    cell.configure(text: text, image: UIImage(named: "DoneIcon")!)
+    
+    guard let object = self.fetchResultsController?.object(at: indexPath) else {
+      fatalError("Attempt to configure cell without a managed object")
+    }
+    
+    let text = object.title
+    if object.thingDone == false {
+      cell.configure(text: text!, image: UIImage(named: "NewThingIcon")!)
+    } else {
+      cell.configure(text: text!, image: UIImage(named: "DoneThingIcon")!)
+    }
     return cell
   }
 }
 
 extension ViewController: UITableViewDelegate {
   
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let context = CoreData.shared.viewContext
+    
+    guard let object = self.fetchResultsController?.object(at: indexPath) else { return }
+    
+      if object.thingDone == true {
+        object.thingDone = false
+      } else {
+      object.thingDone = true
+      }
+    do {
+      try context.save()
+    } catch {
+      fatalError("cannot save the object")
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    return 60
+  }
+  
+  func tableView(
+    _ tableView: UITableView,
+    contextMenuConfigurationForRowAt indexPath: IndexPath,
+    point: CGPoint
+  ) -> UIContextMenuConfiguration? {
+    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+      let deleteAction = UIAction(title: NSLocalizedString("DeleteThing", comment: ""),
+                                  image: UIImage(systemName: "trash"),
+                                  attributes: .destructive) { action in
+        self.deleteThing(indexPath: indexPath)
+      }
+      return UIMenu(title: "", children: [deleteAction])
+    })
+  }
+  
+  private func deleteThing(indexPath: IndexPath) {
+    let context = CoreData.shared.viewContext
+    let object = self.fetchResultsController?.object(at: indexPath)
+    context.delete(object!)
+    do {
+      try context.save()
+    } catch {
+      fatalError("cannot save the object")
+    }
+  }
+}
+
+class CoreData {
+  static let shared = CoreData()
+  private init () {}
+  
+  lazy private var persistentContainer: NSPersistentContainer = {
+    let container = NSPersistentContainer(name: "ModelCoreData")
+    container.loadPersistentStores(completionHandler: { (StoreDescription, error) in
+      if let error = error as NSError? {
+        fatalError("Unresolved error \(error), \(error.userInfo)")
+      }
+    })
+    return container
+  }()
+  
+  var viewContext:NSManagedObjectContext { CoreData.shared.persistentContainer.viewContext }
 }
 
 class MyTableViewCell: UITableViewCell {
@@ -130,16 +253,14 @@ class MyTableViewCell: UITableViewCell {
     statusButton.translatesAutoresizingMaskIntoConstraints = false
     textField.translatesAutoresizingMaskIntoConstraints = false
     
-    statusButton.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-    statusButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-    statusButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 1).isActive = true
-    statusButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
-    statusButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
-    
-    textField.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-    textField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-    textField.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
-    textField.widthAnchor.constraint(equalToConstant: 250).isActive = true
+    NSLayoutConstraint.activate([statusButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+                                 statusButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -15),
+                                 statusButton.widthAnchor.constraint(equalToConstant: 20),
+                                 statusButton.heightAnchor.constraint(equalToConstant: 20),
+                                 textField.topAnchor.constraint(equalTo: contentView.topAnchor),
+                                 textField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                                 textField.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8),
+                                 textField.widthAnchor.constraint(equalToConstant: 250)])
    }
   
   func configure(text: String, image: UIImage) {

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "IMG_9443.jpg",
+      "filename" : "NewThingIcon.svg.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "IMG_9443-1.jpg",
+      "filename" : "NewThingIcon.svg-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "IMG_9443-2.jpg",
+      "filename" : "NewThingIcon.svg-2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
