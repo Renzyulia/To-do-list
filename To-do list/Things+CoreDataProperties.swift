@@ -17,7 +17,7 @@ extension Thing {
     }
 
     @NSManaged public var title: String?
-    @NSManaged public var data: Date?
+    @NSManaged public var date: Date?
     @NSManaged public var thingDone: Bool
     @NSManaged public var notes: String?
   

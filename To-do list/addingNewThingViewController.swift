@@ -9,9 +9,9 @@ import UIKit
 
 class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
   
- private let titleTextField = UITextField()
- private let datePicker = UIDatePicker()
- private let notesTextField = UITextField()
+  private let titleTextField = UITextField()
+  private let datePicker = UIDatePicker()
+  private let notesTextField = UITextField()
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -26,7 +26,7 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     configureCancelButton()
   }
   
- private func configureLabelTextField() {
+   private func configureLabelTextField() {
     let label = UILabel()
     label.font = .systemFont(ofSize: 25, weight: .medium)
     label.textColor = .black
@@ -38,9 +38,10 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     label.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                  label.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)])
-  }
+     
+   }
   
- private func configureTitleTextField() {
+  private func configureTitleTextField() {
     titleTextField.placeholder = "what need to do"
     titleTextField.font = .systemFont(ofSize: 15)
     titleTextField.borderStyle = .roundedRect
@@ -57,9 +58,10 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     NSLayoutConstraint.activate([titleTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                  titleTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 200),
                                  titleTextField.widthAnchor.constraint(equalToConstant: 300)])
+    
   }
   
- private func configureDatePicker() {
+  private func configureDatePicker() {
     
     view.addSubview(datePicker)
     
@@ -70,7 +72,7 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
                                  datePicker.heightAnchor.constraint(equalToConstant: 44)])
   }
   
- private func configureNotesTextField() {
+  private func configureNotesTextField() {
     notesTextField.placeholder = "notes"
     notesTextField.font = .systemFont(ofSize: 15)
     notesTextField.borderStyle = .roundedRect
@@ -90,7 +92,7 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
                                  notesTextField.heightAnchor.constraint(equalToConstant: 130)])
   }
   
- private func configureSaveButton() {
+  private func configureSaveButton() {
     let saveButton = UIButton()
     saveButton.backgroundColor = .white
     saveButton.setTitle("Save", for: .normal)
@@ -110,7 +112,7 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     let context = CoreData.shared.viewContext
     let object = Thing(context: context)
     object.title = titleTextField.text
-    object.data = datePicker.date
+    object.date = datePicker.date
     object.thingDone = false
     object.notes = notesTextField.text
     do {
@@ -121,7 +123,7 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     dismiss(animated: true, completion: nil)
   }
   
- private func configureCancelButton() {
+  private func configureCancelButton() {
     let cancelButton = UIButton()
     cancelButton.backgroundColor = .white
     cancelButton.setTitle("Cancel", for: .normal)
@@ -141,5 +143,3 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     dismiss(animated: true, completion: nil)
   }
 }
-
-
