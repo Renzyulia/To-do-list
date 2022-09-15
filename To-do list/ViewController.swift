@@ -173,7 +173,7 @@ extension ViewController: UITableViewDelegate {
       if object.thingDone == true {
         object.thingDone = false
       } else {
-      object.thingDone = true
+        object.thingDone = true
       }
     do {
       try context.save()
@@ -203,7 +203,7 @@ extension ViewController: UITableViewDelegate {
   
   private func deleteThing(indexPath: IndexPath) {
     let context = CoreData.shared.viewContext
-    let object = self.fetchResultsController?.object(at: indexPath)
+    let object = fetchResultsController?.object(at: indexPath)
     context.delete(object!)
     do {
       try context.save()
