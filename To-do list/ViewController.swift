@@ -23,7 +23,7 @@ extension Date {
 
 class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
   
-  private let identifireCell = "CellToThing"
+  private let identifierCell = "CellToThing"
   private let date = Date()
   private let motivationalLabel = UILabel()
   private var contentTableView = UITableView()
@@ -82,7 +82,7 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
   }
   
   private func configureTableView() {
-    contentTableView.register(MyTableViewCell.self, forCellReuseIdentifier: identifireCell)
+    contentTableView.register(MyTableViewCell.self, forCellReuseIdentifier: identifierCell)
     contentTableView.backgroundColor = .clear
     contentTableView.dataSource = self
     contentTableView.delegate = self
@@ -97,9 +97,6 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
   }
   
   private func configureMotivationLabel() {
-//    motivationalLabel.font = .systemFont(ofSize: 25, weight: .medium)
-//    motivationalLabel.minimumScaleFactor = 0.1    //or whatever suits your need
-    //    motivationalLabel.lineBreakMode = .byClipping
     motivationalLabel.adjustsFontSizeToFitWidth = true
     motivationalLabel.numberOfLines = 0
     motivationalLabel.textColor = .black
@@ -143,13 +140,13 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
     request.httpMethod = "GET"
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
   
-    URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
+    URLSession.shared.dataTask(with: request, completionHandler: { [weak self] data, response, error -> Void in
       do {
         let jsonDecoder = JSONDecoder()
         let responseModel = try jsonDecoder.decode(Model.self, from: data!)
         
         DispatchQueue.main.async {
-          self.motivationalLabel.text = responseModel.contents.quotes[0].quote
+          self?.motivationalLabel.text = responseModel.contents.quotes[0].quote
         }
       } catch {
           print("JSON Serialization error")
@@ -188,9 +185,9 @@ extension ViewController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: identifireCell, for: indexPath) as! MyTableViewCell
+    let cell = tableView.dequeueReusableCell(withIdentifier: identifierCell, for: indexPath) as! MyTableViewCell
     
-    guard let object = self.fetchResultsController?.object(at: indexPath) else {
+    guard let object = fetchResultsController?.object(at: indexPath) else {
       fatalError("Attempt to configure cell without a managed object")
     }
     
@@ -209,13 +206,8 @@ extension ViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let context = CoreData.shared.viewContext
     
-    guard let object = self.fetchResultsController?.object(at: indexPath) else { return }
-    
-      if object.thingDone == true {
-        object.thingDone = false
-      } else {
-        object.thingDone = true
-      }
+    guard let object = fetchResultsController?.object(at: indexPath) else { return }
+      object.thingDone = !object.thingDone
     do {
       try context.save()
     } catch {
@@ -232,11 +224,11 @@ extension ViewController: UITableViewDelegate {
     contextMenuConfigurationForRowAt indexPath: IndexPath,
     point: CGPoint
   ) -> UIContextMenuConfiguration? {
-    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
       let deleteAction = UIAction(title: NSLocalizedString("DeleteThing", comment: ""),
                                   image: UIImage(systemName: "trash"),
                                   attributes: .destructive) { action in
-        self.deleteThing(indexPath: indexPath)
+        self?.deleteThing(indexPath: indexPath)
       }
       return UIMenu(title: "", children: [deleteAction])
     })

@@ -11,8 +11,10 @@ import CoreData
 class AddingShareTodoListViewController: UIViewController, NSFetchedResultsControllerDelegate {
   
   private let contentTableView = UITableView()
-  private let identifireCell = "CellToThing"
+  private let identifierCell = "CellToThing"
+  private let dateFormatter = DateFormatter()
   private var fetchResultsController: NSFetchedResultsController<Thing>?
+  
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -42,7 +44,7 @@ class AddingShareTodoListViewController: UIViewController, NSFetchedResultsContr
   }
   
   private func configureTableView() {
-    contentTableView.register(TableViewCell.self, forCellReuseIdentifier: identifireCell)
+    contentTableView.register(TableViewCell.self, forCellReuseIdentifier: identifierCell)
     contentTableView.backgroundColor = .clear
     contentTableView.dataSource = self
     contentTableView.delegate = self
@@ -75,14 +77,13 @@ extension AddingShareTodoListViewController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: identifireCell, for: indexPath) as! TableViewCell
+    let cell = tableView.dequeueReusableCell(withIdentifier: identifierCell, for: indexPath) as! TableViewCell
     
-    guard let object = self.fetchResultsController?.object(at: indexPath) else {
+    guard let object = fetchResultsController?.object(at: indexPath) else {
       fatalError("Attempt to configure cell without a managed object")
     }
     
     let text = object.title
-    let dateFormatter = DateFormatter()
     dateFormatter.dateStyle = .medium
     let date = dateFormatter.string(from: object.date!)
     
@@ -101,13 +102,8 @@ extension AddingShareTodoListViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let context = CoreData.shared.viewContext
     
-    guard let object = self.fetchResultsController?.object(at: indexPath) else { return }
-    
-      if object.thingDone == true {
-        object.thingDone = false
-      } else {
-        object.thingDone = true
-      }
+    guard let object = fetchResultsController?.object(at: indexPath) else { return }
+      object.thingDone = !object.thingDone
     do {
       try context.save()
     } catch {
@@ -124,14 +120,14 @@ extension AddingShareTodoListViewController: UITableViewDelegate {
     contextMenuConfigurationForRowAt indexPath: IndexPath,
     point: CGPoint
   ) -> UIContextMenuConfiguration? {
-    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] suggestedActions in
       let deleteAction = UIAction(title: NSLocalizedString("DeleteThing", comment: ""),
                                   image: UIImage(systemName: "trash"),
                                   attributes: .destructive) { action in
-        self.deleteThing(indexPath: indexPath)
+        self?.deleteThing(indexPath: indexPath)
       }
       return UIMenu(title: "", children: [deleteAction])
-    })
+    }
   }
   
   private func deleteThing(indexPath: IndexPath) {
