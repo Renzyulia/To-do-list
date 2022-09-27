@@ -23,8 +23,9 @@ extension Date {
 
 class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
   
-  private let identifireCell = "CellToThing"
+  private let identifierCell = "CellToThing"
   private let date = Date()
+  private let motivationalLabel = UILabel()
   private var contentTableView = UITableView()
   private var fetchResultsController: NSFetchedResultsController<Thing>?
   
@@ -41,6 +42,11 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
     configureAddButton()
   }
   
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    getQuote()
+  }
+  
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
     contentTableView.reloadData()
   }
@@ -48,8 +54,8 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
   private func getThingsFromDataBases() {
     let context = CoreData.shared.viewContext
     let fetchRequest = Thing.fetchRequest()
-    fetchRequest.sortDescriptors = [NSSortDescriptor(key: "data", ascending: true)]
-    let predicate = NSPredicate(format: "data >= %@ AND data <= %@", date.startOfDay as CVarArg, date.endOfDay as CVarArg)
+    fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+    let predicate = NSPredicate(format: "date >= %@ AND date <= %@", date.startOfDay as CVarArg, date.endOfDay as CVarArg)
     fetchRequest.predicate = predicate
     let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
     self.fetchResultsController = controller
@@ -76,7 +82,7 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
   }
   
   private func configureTableView() {
-    contentTableView.register(MyTableViewCell.self, forCellReuseIdentifier: identifireCell)
+    contentTableView.register(MyTableViewCell.self, forCellReuseIdentifier: identifierCell)
     contentTableView.backgroundColor = .clear
     contentTableView.dataSource = self
     contentTableView.delegate = self
@@ -91,17 +97,19 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
   }
   
   private func configureMotivationLabel() {
-    let motivationalLabel = UILabel()
-    motivationalLabel.font = .systemFont(ofSize: 25, weight: .medium)
+    motivationalLabel.adjustsFontSizeToFitWidth = true
+    motivationalLabel.numberOfLines = 0
     motivationalLabel.textColor = .black
     motivationalLabel.textAlignment = .center
-    motivationalLabel.text = "You are great!"
     
     view.addSubview(motivationalLabel)
     
     motivationalLabel.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([motivationalLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 motivationalLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -110)])
+                                 motivationalLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -110),
+                                 motivationalLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -50),
+                                 motivationalLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50),
+                                 motivationalLabel.heightAnchor.constraint(equalToConstant: 100)])
   }
   
   private func configureAddButton() {
@@ -127,6 +135,36 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
     self.present(addingNewThingViewController, animated: true, completion: nil)
   }
   
+  private func getQuote() {
+    var request = URLRequest(url: URL(string: "https://quotes.rest/qod")!)
+    request.httpMethod = "GET"
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+  
+    URLSession.shared.dataTask(with: request, completionHandler: { [weak self] data, response, error -> Void in
+      do {
+        let jsonDecoder = JSONDecoder()
+        let responseModel = try jsonDecoder.decode(Model.self, from: data!)
+        
+        DispatchQueue.main.async {
+          self?.motivationalLabel.text = responseModel.contents.quotes[0].quote
+        }
+      } catch {
+          print("JSON Serialization error")
+        }
+    }).resume()
+  }
+}
+
+struct Model: Decodable {
+  let contents: Content
+}
+
+struct Content: Decodable {
+  let quotes: [Quote]
+}
+
+struct Quote: Decodable {
+  let quote: String
 }
 
 extension ViewController: UITableViewDataSource {
@@ -147,9 +185,9 @@ extension ViewController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: identifireCell, for: indexPath) as! MyTableViewCell
+    let cell = tableView.dequeueReusableCell(withIdentifier: identifierCell, for: indexPath) as! MyTableViewCell
     
-    guard let object = self.fetchResultsController?.object(at: indexPath) else {
+    guard let object = fetchResultsController?.object(at: indexPath) else {
       fatalError("Attempt to configure cell without a managed object")
     }
     
@@ -168,13 +206,8 @@ extension ViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let context = CoreData.shared.viewContext
     
-    guard let object = self.fetchResultsController?.object(at: indexPath) else { return }
-    
-      if object.thingDone == true {
-        object.thingDone = false
-      } else {
-        object.thingDone = true
-      }
+    guard let object = fetchResultsController?.object(at: indexPath) else { return }
+      object.thingDone = !object.thingDone
     do {
       try context.save()
     } catch {
@@ -191,11 +224,11 @@ extension ViewController: UITableViewDelegate {
     contextMenuConfigurationForRowAt indexPath: IndexPath,
     point: CGPoint
   ) -> UIContextMenuConfiguration? {
-    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
       let deleteAction = UIAction(title: NSLocalizedString("DeleteThing", comment: ""),
                                   image: UIImage(systemName: "trash"),
                                   attributes: .destructive) { action in
-        self.deleteThing(indexPath: indexPath)
+        self?.deleteThing(indexPath: indexPath)
       }
       return UIMenu(title: "", children: [deleteAction])
     })
@@ -231,6 +264,7 @@ class CoreData {
 }
 
 class MyTableViewCell: UITableViewCell {
+  
   private let statusButton = UIImageView()
   private let textField = UITextField()
   

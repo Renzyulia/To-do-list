@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A34FBEEF28D31603005538F7 /* AddingSharedTodoListViewCController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34FBEEE28D31602005538F7 /* AddingSharedTodoListViewCController.swift */; };
 		A3678BF628AFC1F300F18D35 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3678BF528AFC1F300F18D35 /* AppDelegate.swift */; };
 		A3678BF828AFC1F300F18D35 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3678BF728AFC1F300F18D35 /* SceneDelegate.swift */; };
 		A3678BFA28AFC1F300F18D35 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3678BF928AFC1F300F18D35 /* ViewController.swift */; };
@@ -16,10 +17,11 @@
 		A3A6C97728BCDC70000DFA7C /* ModelCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A3A6C97528BCDC70000DFA7C /* ModelCoreData.xcdatamodeld */; };
 		A3A6C97A28BCEC9D000DFA7C /* Things+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A6C97828BCEC9D000DFA7C /* Things+CoreDataClass.swift */; };
 		A3A6C97B28BCEC9D000DFA7C /* Things+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A6C97928BCEC9D000DFA7C /* Things+CoreDataProperties.swift */; };
-		A3AF830F28C1269F000549AB /* addingNewThingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3AF830E28C1269F000549AB /* addingNewThingViewController.swift */; };
+		A3AF830F28C1269F000549AB /* AddingNewThingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3AF830E28C1269F000549AB /* AddingNewThingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A34FBEEE28D31602005538F7 /* AddingSharedTodoListViewCController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddingSharedTodoListViewCController.swift; sourceTree = "<group>"; };
 		A3678BF228AFC1F300F18D35 /* To-do list.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "To-do list.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3678BF528AFC1F300F18D35 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A3678BF728AFC1F300F18D35 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -31,7 +33,7 @@
 		A3A6C97628BCDC70000DFA7C /* ModelCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ModelCoreData.xcdatamodel; sourceTree = "<group>"; };
 		A3A6C97828BCEC9D000DFA7C /* Things+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Things+CoreDataClass.swift"; path = "To-do list/Things+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A3A6C97928BCEC9D000DFA7C /* Things+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Things+CoreDataProperties.swift"; path = "To-do list/Things+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		A3AF830E28C1269F000549AB /* addingNewThingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addingNewThingViewController.swift; sourceTree = "<group>"; };
+		A3AF830E28C1269F000549AB /* AddingNewThingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddingNewThingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +76,8 @@
 				A3678BFE28AFC1F600F18D35 /* Assets.xcassets */,
 				A3678C0028AFC1F600F18D35 /* LaunchScreen.storyboard */,
 				A3678C0328AFC1F600F18D35 /* Info.plist */,
-				A3AF830E28C1269F000549AB /* addingNewThingViewController.swift */,
+				A3AF830E28C1269F000549AB /* AddingNewThingViewController.swift */,
+				A34FBEEE28D31602005538F7 /* AddingSharedTodoListViewCController.swift */,
 			);
 			path = "To-do list";
 			sourceTree = "<group>";
@@ -154,7 +157,8 @@
 				A3678BF628AFC1F300F18D35 /* AppDelegate.swift in Sources */,
 				A3A6C97B28BCEC9D000DFA7C /* Things+CoreDataProperties.swift in Sources */,
 				A3A6C97728BCDC70000DFA7C /* ModelCoreData.xcdatamodeld in Sources */,
-				A3AF830F28C1269F000549AB /* addingNewThingViewController.swift in Sources */,
+				A3AF830F28C1269F000549AB /* AddingNewThingViewController.swift in Sources */,
+				A34FBEEF28D31603005538F7 /* AddingSharedTodoListViewCController.swift in Sources */,
 				A3678BF828AFC1F300F18D35 /* SceneDelegate.swift in Sources */,
 				A3A6C97A28BCEC9D000DFA7C /* Things+CoreDataClass.swift in Sources */,
 			);

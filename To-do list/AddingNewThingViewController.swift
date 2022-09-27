@@ -26,7 +26,7 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     configureCancelButton()
   }
   
-   private func configureLabelTextField() {
+  private func configureLabelTextField() {
     let label = UILabel()
     label.font = .systemFont(ofSize: 25, weight: .medium)
     label.textColor = .black
@@ -38,8 +38,7 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     label.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                  label.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)])
-     
-   }
+  }
   
   private func configureTitleTextField() {
     titleTextField.placeholder = "what need to do"
