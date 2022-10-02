@@ -26,7 +26,7 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
   private let identifierCell = "CellToThing"
   private let date = Date()
   private let motivationalLabel = UILabel()
-  private var contentTableView = UITableView()
+  private let contentTableView = UITableView()
   private var fetchResultsController: NSFetchedResultsController<Thing>?
   
   override func viewDidLoad() {
