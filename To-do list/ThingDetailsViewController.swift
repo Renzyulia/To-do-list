@@ -90,7 +90,6 @@ class ThingDetailsViewController: UIViewController, UITextFieldDelegate, NSFetch
   }
   
   private func configureStatusButton() {
-  
     if thing.thingDone == false {
       thingStatus.image = UIImage(named: "NewThingIcon")
     } else {
@@ -100,9 +99,9 @@ class ThingDetailsViewController: UIViewController, UITextFieldDelegate, NSFetch
     thingStatus.isUserInteractionEnabled = true
     thingStatus.backgroundColor = UIColor(named: "СomplementaryСolor")
     
-    let tup = UITapGestureRecognizer()
-    tup.addTarget(self, action: #selector(tappedView))
-    thingStatus.addGestureRecognizer(tup)
+    let tapGesture = UITapGestureRecognizer()
+    tapGesture.addTarget(self, action: #selector(tappedView))
+    thingStatus.addGestureRecognizer(tapGesture)
     
     view.addSubview(thingStatus)
     
