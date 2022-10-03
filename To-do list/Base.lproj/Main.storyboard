@@ -15,7 +15,7 @@
             <objects>
                 <viewController id="tL5-aZ-TA4" customClass="ViewController" customModule="To_do_list" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Z7h-Vp-NYf">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="bIk-Oi-Aan"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -39,7 +39,7 @@
             <objects>
                 <viewController id="gmU-By-vih" customClass="AddingShareTodoListViewController" customModule="To_do_list" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MVi-jo-1JS">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="Dlh-lB-RXP"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -62,9 +62,10 @@
         <scene sceneID="WjM-nD-Ws3">
             <objects>
                 <tabBarController id="Cgn-cB-mrG" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" itemPositioning="fill" id="02W-Ze-APK">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" itemPositioning="fill" id="02W-Ze-APK">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
                         <color key="barTintColor" name="BackgroundColor"/>
                         <color key="selectedImageTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
