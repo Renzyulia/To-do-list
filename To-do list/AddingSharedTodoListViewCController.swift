@@ -14,8 +14,7 @@ class AddingShareTodoListViewController: UIViewController, NSFetchedResultsContr
   private let identifierCell = "CellToThing"
   private let dateFormatter = DateFormatter()
   private var fetchResultsController: NSFetchedResultsController<Thing>?
-  
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -49,13 +48,15 @@ class AddingShareTodoListViewController: UIViewController, NSFetchedResultsContr
     contentTableView.dataSource = self
     contentTableView.delegate = self
     
+    contentTableView.clipsToBounds = true
+    
     view.addSubview(contentTableView)
     
     contentTableView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([contentTableView.rightAnchor.constraint(equalTo: view.rightAnchor),
                                  contentTableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-                                 contentTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-                                 contentTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50)])
+                                 contentTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                                 contentTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)])
   }
 }
 
@@ -100,15 +101,10 @@ extension AddingShareTodoListViewController: UITableViewDataSource {
 extension AddingShareTodoListViewController: UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let context = CoreData.shared.viewContext
-    
     guard let object = fetchResultsController?.object(at: indexPath) else { return }
-      object.thingDone = !object.thingDone
-    do {
-      try context.save()
-    } catch {
-      fatalError("cannot save the object")
-    }
+    let thing = object
+    let thingDetailsViewController = ThingDetailsViewController(thing: thing)
+    self.present(thingDetailsViewController, animated: true, completion: nil)
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -143,7 +139,6 @@ extension AddingShareTodoListViewController: UITableViewDelegate {
 }
 
 class TableViewCell: UITableViewCell {
-  
   private let statusButton = UIImageView()
   private let textField = UITextField()
   private let date: UILabel = {

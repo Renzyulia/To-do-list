@@ -37,7 +37,7 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     
     label.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 label.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)])
+                                 label.topAnchor.constraint(equalTo: view.topAnchor, constant: 150)])
   }
   
   private func configureTitleTextField() {
@@ -55,18 +55,17 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     
     titleTextField.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([titleTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 titleTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 200),
+                                 titleTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 230),
                                  titleTextField.widthAnchor.constraint(equalToConstant: 300)])
     
   }
   
   private func configureDatePicker() {
-    
     view.addSubview(datePicker)
     
     datePicker.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([datePicker.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 datePicker.topAnchor.constraint(equalTo: view.topAnchor, constant: 250),
+                                 datePicker.topAnchor.constraint(equalTo: view.topAnchor, constant: 280),
                                  datePicker.widthAnchor.constraint(equalToConstant: 300),
                                  datePicker.heightAnchor.constraint(equalToConstant: 44)])
   }
@@ -86,14 +85,14 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     
     notesTextField.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([notesTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 notesTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 300),
+                                 notesTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 330),
                                  notesTextField.widthAnchor.constraint(equalToConstant: 300),
-                                 notesTextField.heightAnchor.constraint(equalToConstant: 130)])
+                                 notesTextField.heightAnchor.constraint(equalToConstant: 150)])
   }
   
   private func configureSaveButton() {
     let saveButton = UIButton()
-    saveButton.backgroundColor = .white
+    saveButton.backgroundColor = UIColor(named: "СomplementaryСolor")
     saveButton.setTitle("Save", for: .normal)
     saveButton.setTitleColor(.black, for: .normal)
     saveButton.addTarget(self, action: #selector(save), for: .touchUpInside)
@@ -101,10 +100,10 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     view.addSubview(saveButton)
 
     saveButton.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -250),
-                                 saveButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 70),
+    NSLayoutConstraint.activate([saveButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+                                 saveButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
                                  saveButton.widthAnchor.constraint(equalToConstant: 100),
-                                 saveButton.heightAnchor.constraint(equalToConstant: 50)])
+                                 saveButton.heightAnchor.constraint(equalToConstant: 40)])
   }
   
   @objc private func save() {
@@ -124,7 +123,7 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
   
   private func configureCancelButton() {
     let cancelButton = UIButton()
-    cancelButton.backgroundColor = .white
+    cancelButton.backgroundColor = UIColor(named: "СomplementaryСolor")
     cancelButton.setTitle("Cancel", for: .normal)
     cancelButton.setTitleColor(.black, for: .normal)
     cancelButton.addTarget(self, action: #selector(cancel), for: .touchUpInside)
@@ -132,10 +131,10 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
     view.addSubview(cancelButton)
 
     cancelButton.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -250),
-                                 cancelButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -70),
+    NSLayoutConstraint.activate([cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+                                 cancelButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
                                  cancelButton.widthAnchor.constraint(equalToConstant: 100),
-                                 cancelButton.heightAnchor.constraint(equalToConstant: 50)])
+                                 cancelButton.heightAnchor.constraint(equalToConstant: 40)])
   }
   
   @objc private func cancel() {

@@ -4,25 +4,26 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Things-->
+        <!--To-do list-->
         <scene sceneID="T2B-0Q-O7J">
             <objects>
-                <viewController id="tL5-aZ-TA4" customClass="AddingShareTodoListViewController" customModule="To_do_list" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="tL5-aZ-TA4" customClass="ViewController" customModule="To_do_list" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Z7h-Vp-NYf">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="bIk-Oi-Aan"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Things" id="Tax-h3-g8b">
+                    <tabBarItem key="tabBarItem" title="To-do list" id="Tax-h3-g8b">
                         <imageReference key="image" image="list.bullet.rectangle.fill" catalog="system" symbolScale="large" renderingMode="hierarchical-single">
                             <hierarchicalColors>
-                                <color systemColor="systemPurpleColor"/>
+                                <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color systemColor="secondaryLabelColor"/>
                                 <color systemColor="tertiaryLabelColor"/>
                             </hierarchicalColors>
@@ -33,20 +34,20 @@
             </objects>
             <point key="canvasLocation" x="-823" y="-123"/>
         </scene>
-        <!--To-do list-->
+        <!--Things-->
         <scene sceneID="dsq-nm-jFy">
             <objects>
-                <viewController id="gmU-By-vih" customClass="ViewController" customModule="To_do_list" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="gmU-By-vih" customClass="AddingShareTodoListViewController" customModule="To_do_list" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MVi-jo-1JS">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="Dlh-lB-RXP"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="To-do list" id="gbF-Uh-8KA">
+                    <tabBarItem key="tabBarItem" title="Things" id="gbF-Uh-8KA">
                         <imageReference key="image" image="list.bullet.rectangle.portrait" catalog="system" symbolScale="large" renderingMode="hierarchical-single">
                             <hierarchicalColors>
-                                <color systemColor="systemPurpleColor"/>
+                                <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color systemColor="secondaryLabelColor"/>
                                 <color systemColor="tertiaryLabelColor"/>
                             </hierarchicalColors>
@@ -61,10 +62,12 @@
         <scene sceneID="WjM-nD-Ws3">
             <objects>
                 <tabBarController id="Cgn-cB-mrG" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="02W-Ze-APK">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" itemPositioning="fill" id="02W-Ze-APK">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
+                        <color key="barTintColor" name="BackgroundColor"/>
+                        <color key="selectedImageTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
                         <segue destination="tL5-aZ-TA4" kind="relationship" relationship="viewControllers" id="PW8-6C-tyM"/>
@@ -79,14 +82,14 @@
     <resources>
         <image name="list.bullet.rectangle.fill" catalog="system" width="128" height="93"/>
         <image name="list.bullet.rectangle.portrait" catalog="system" width="115" height="128"/>
+        <namedColor name="BackgroundColor">
+            <color red="0.69599997997283936" green="0.63599997758865356" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tertiaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
