@@ -7,87 +7,32 @@
 
 import UIKit
 
-class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
+class AddingNewThingViewController: UIViewController, UITextFieldDelegate, DateThingCellDelegate {
   
-  private let titleTextField = UITextField()
-  private let datePicker = UIDatePicker()
-  private let notesTextField = UITextField()
+  private let tableView = UITableView(frame: .zero, style: .grouped)
+  private var numberOfClicks = 0
+  private var numberOfRowsInSecondSection = 1
+  private var dateSet = false
+  private let labelCell = LabelCell()
+  private let titleThingCell = TitleThingCell()
+  private let notesThingCell = NotesThingCell()
+  private let dateThingCell = DateThingCell()
+  private let calendarCell = CalendarCell()
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     view.backgroundColor = UIColor(named: "BackgroundColor")
     
-    configureLabelTextField()
-    configureTitleTextField()
-    configureDatePicker()
-    configureNotesTextField()
+    configureTableView()
     configureSaveButton()
     configureCancelButton()
   }
   
-  private func configureLabelTextField() {
-    let label = UILabel()
-    label.font = .systemFont(ofSize: 25, weight: .medium)
-    label.textColor = .black
-    label.textAlignment = .center
-    label.text = "Add new thing"
-    
-    view.addSubview(label)
-    
-    label.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 label.topAnchor.constraint(equalTo: view.topAnchor, constant: 150)])
-  }
-  
-  private func configureTitleTextField() {
-    titleTextField.placeholder = "what need to do"
-    titleTextField.font = .systemFont(ofSize: 15)
-    titleTextField.borderStyle = .roundedRect
-    titleTextField.autocorrectionType = .no
-    titleTextField.keyboardType = .default
-    titleTextField.returnKeyType = .done
-    titleTextField.clearButtonMode = .whileEditing
-    titleTextField.contentVerticalAlignment = .center
-    titleTextField.delegate = self
-    
-    view.addSubview(titleTextField)
-    
-    titleTextField.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([titleTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 titleTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 230),
-                                 titleTextField.widthAnchor.constraint(equalToConstant: 300)])
-    
-  }
-  
-  private func configureDatePicker() {
-    view.addSubview(datePicker)
-    
-    datePicker.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([datePicker.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 datePicker.topAnchor.constraint(equalTo: view.topAnchor, constant: 280),
-                                 datePicker.widthAnchor.constraint(equalToConstant: 300),
-                                 datePicker.heightAnchor.constraint(equalToConstant: 44)])
-  }
-  
-  private func configureNotesTextField() {
-    notesTextField.placeholder = "notes"
-    notesTextField.font = .systemFont(ofSize: 15)
-    notesTextField.borderStyle = .roundedRect
-    notesTextField.autocorrectionType = .no
-    notesTextField.keyboardType = .phonePad
-    notesTextField.returnKeyType = .done
-    notesTextField.clearButtonMode = .whileEditing
-    notesTextField.contentVerticalAlignment = .center
-    notesTextField.delegate = self
-    
-    view.addSubview(notesTextField)
-    
-    notesTextField.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([notesTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 notesTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 330),
-                                 notesTextField.widthAnchor.constraint(equalToConstant: 300),
-                                 notesTextField.heightAnchor.constraint(equalToConstant: 150)])
+  func switchTurn() {
+    print("SwitchTurn")
+    numberOfClicks += 1
+    updateCalendarVisibility()
   }
   
   private func configureSaveButton() {
@@ -109,10 +54,14 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
   @objc private func save() {
     let context = CoreData.shared.viewContext
     let object = Thing(context: context)
-    object.title = titleTextField.text
-    object.date = datePicker.date
+    object.title = titleThingCell.textField.text
+    if dateSet {
+      object.date = calendarCell.calendar.date
+    } else {
+      object.date = nil
+    }
     object.thingDone = false
-    object.notes = notesTextField.text
+    object.notes = notesThingCell.textField.text
     do {
       try context.save()
     } catch {
@@ -139,5 +88,234 @@ class AddingNewThingViewController: UIViewController, UITextFieldDelegate {
   
   @objc private func cancel() {
     dismiss(animated: true, completion: nil)
+  }
+  
+  private func configureTableView() {
+    tableView.backgroundColor = .clear
+    tableView.dataSource = self
+    tableView.delegate = self
+    
+    view.addSubview(tableView)
+    
+    tableView.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([tableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
+                                 tableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
+                                 tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 90),
+                                 tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
+  }
+  
+  func updateCalendarVisibility() {
+    tableView.beginUpdates()
+    if numberOfClicks % 2 != 0 {
+      tableView.insertRows(at: [IndexPath(row: 1, section: 2)], with: .bottom)
+      numberOfRowsInSecondSection += 1
+    } else {
+      tableView.deleteRows(at: [IndexPath(row: 1, section: 2)], with: .top)
+      numberOfRowsInSecondSection -= 1
+    }
+    tableView.endUpdates()
+  }
+}
+
+extension AddingNewThingViewController: UITableViewDataSource {
+  func numberOfSections(in tableView: UITableView) -> Int {
+    return 3
+  }
+  
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    switch section {
+    case 0: return 1
+    case 1: return 2
+    case 2: return numberOfRowsInSecondSection
+    default: break
+    }
+    return section
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    var cell = UITableViewCell()
+    switch (indexPath.section, indexPath.row) {
+    case (0,0): cell = labelCell; labelCell.backgroundColor = UIColor(named: "BackgroundColor"); labelCell.configureCell()
+    case (1,0): cell = titleThingCell; titleThingCell.configureCell()
+    case (1,1): cell = notesThingCell; notesThingCell.configureCell()
+    case (2,0): cell = dateThingCell; dateThingCell.delegate = self; dateThingCell.configureCell()
+    case (2,1): cell = calendarCell; calendarCell.configureCell(); dateSet = true
+    default: break
+    }
+    return cell
+  }
+}
+
+extension AddingNewThingViewController: UITableViewDelegate {
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    return 60
+  }
+  
+  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    return 40
+  }
+}
+
+class LabelCell: UITableViewCell {
+  private let label = UILabel()
+  
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  func configureCell() {
+    label.font = .systemFont(ofSize: 25, weight: .medium)
+    label.textColor = .black
+    label.textAlignment = .center
+    label.text = "Add new thing"
+
+    contentView.addSubview(label)
+
+    label.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([label.topAnchor.constraint(equalTo: contentView.topAnchor),
+                                 label.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+                                 label.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+                                 label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)])
+  }
+}
+
+class TitleThingCell: UITableViewCell {
+  let textField = UITextField()
+  
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+    configureCell()
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  func configureCell() {
+    textField.placeholder = "what need to do"
+    textField.font = .systemFont(ofSize: 15)
+    textField.borderStyle = .roundedRect
+    textField.autocorrectionType = .no
+    textField.keyboardType = .default
+    textField.returnKeyType = .done
+    textField.clearButtonMode = .whileEditing
+    textField.contentVerticalAlignment = .center
+    
+    contentView.addSubview(textField)
+    
+    textField.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([textField.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+                                 textField.topAnchor.constraint(equalTo: contentView.topAnchor),
+                                 textField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                                 textField.rightAnchor.constraint(equalTo: contentView.rightAnchor)])
+  }
+}
+
+class NotesThingCell: UITableViewCell {
+  let textField = UITextField()
+  
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+    configureCell()
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  func configureCell() {
+    textField.placeholder = "notes"
+    textField.font = .systemFont(ofSize: 15)
+    textField.borderStyle = .roundedRect
+    textField.autocorrectionType = .no
+    textField.keyboardType = .default
+    textField.returnKeyType = .done
+    textField.clearButtonMode = .whileEditing
+    textField.contentVerticalAlignment = .center
+    
+    contentView.addSubview(textField)
+    
+    textField.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([textField.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+                                 textField.topAnchor.constraint(equalTo: contentView.topAnchor),
+                                 textField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                                 textField.rightAnchor.constraint(equalTo: contentView.rightAnchor)])
+  }
+}
+
+protocol DateThingCellDelegate: AnyObject {
+  func switchTurn()
+}
+
+class DateThingCell: UITableViewCell {
+  private let dateTextView = UITextView()
+  let switchDate = UISwitch()
+  weak var delegate: DateThingCellDelegate?
+  
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  func configureCell() {
+    dateTextView.text = "Date"
+    dateTextView.font = .systemFont(ofSize: 20)
+    dateTextView.autocorrectionType = .no
+    dateTextView.keyboardType = .phonePad
+    dateTextView.returnKeyType = .done
+    dateTextView.textAlignment = .left
+    
+    switchDate.onTintColor = .gray
+    switchDate.tintColor = .green
+    switchDate.setOn(false, animated: true)
+    switchDate.addTarget(self, action: #selector(switchTurn), for: .valueChanged)
+    
+    contentView.addSubview(dateTextView)
+    contentView.addSubview(switchDate)
+    
+    dateTextView.translatesAutoresizingMaskIntoConstraints = false
+    switchDate.translatesAutoresizingMaskIntoConstraints = false
+    
+    NSLayoutConstraint.activate([switchDate.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+                                 switchDate.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -50),
+                                 switchDate.widthAnchor.constraint(equalToConstant: 20),
+                                 switchDate.heightAnchor.constraint(equalToConstant: 20),
+                                 dateTextView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+                                 dateTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                                 dateTextView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10),
+                                 dateTextView.widthAnchor.constraint(equalToConstant: 150)])
+  }
+  
+  @objc func switchTurn() {
+    delegate?.switchTurn()
+  }
+}
+
+class CalendarCell: UITableViewCell {
+  let calendar = UIDatePicker()
+ 
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  func configureCell() {
+    contentView.addSubview(calendar)
+    
+    calendar.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([calendar.topAnchor.constraint(equalTo: contentView.topAnchor),
+                                 calendar.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+                                 calendar.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+                                 calendar.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)])
   }
 }

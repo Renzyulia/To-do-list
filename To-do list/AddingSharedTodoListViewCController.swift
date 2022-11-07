@@ -86,8 +86,14 @@ extension AddingShareTodoListViewController: UITableViewDataSource {
     
     let text = object.title
     dateFormatter.dateStyle = .medium
-    let date = dateFormatter.string(from: object.date!)
     
+    let date: String = {
+      var date = " "
+      if object.date != nil {
+        date = dateFormatter.string(from: object.date!)
+      }
+      return date
+    }()
     
     if object.thingDone == false {
       cell.configure(text: text!, image: UIImage(named: "NewThingIcon")!, dateLabel: date)

@@ -93,7 +93,7 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
     NSLayoutConstraint.activate([contentTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -31),
                                  contentTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 32),
                                  contentTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 210),
-                                 contentTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -240)])
+                                 contentTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -145)])
   }
   
   private func configureMotivationLabel() {
@@ -106,7 +106,7 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
     
     motivationalLabel.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([motivationalLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                 motivationalLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -110),
+                                 motivationalLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -35),
                                  motivationalLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -50),
                                  motivationalLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50),
                                  motivationalLabel.heightAnchor.constraint(equalToConstant: 100)])
@@ -139,12 +139,12 @@ class ViewController: UIViewController, NSFetchedResultsControllerDelegate {
     var request = URLRequest(url: URL(string: "https://quotes.rest/qod")!)
     request.httpMethod = "GET"
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-  
+
     URLSession.shared.dataTask(with: request, completionHandler: { [weak self] data, response, error -> Void in
       do {
         let jsonDecoder = JSONDecoder()
         let responseModel = try jsonDecoder.decode(Model.self, from: data!)
-        
+
         DispatchQueue.main.async {
           self?.motivationalLabel.text = responseModel.contents.quotes[0].quote
         }
