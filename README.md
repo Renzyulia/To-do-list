@@ -1,6 +1,6 @@
 # To-do-list
-Это учебный проект - приложение для планирования дел. 
-В нем можно добавлять дела, редактировать, удалять, помечать дела как выполненные. Есть возможность добавлять дела как на конкретно сегодняшний день, так и на будущее или вовсе без указания даты.
+It's a training project. it's to-do list app. In it, you can add new things, edit, delete things and mark things as completed. You have opportunity to add a thing for today, for the future or without a date.
 
-Приложение в процессе доработок. 
-Планирую поправить момент с добавлением даты к уже существующему делу. Добавить возможность получать предложения об уведомлении о переносе  невыполненных за сегодня дел на другие дни. Сделать список, где содержатся все дела, структурированным по секциям, чтобы разграничить дела с разными датами и без даты для удобства использования.
+The app is still being developed.
+
+I want to add work with data, becouse it's not working quite right now. Add the ability to receive notifications about the transfer of outstanding tasks for today to other days. And make the list with all things structured by section to differentiate things with different dates and without dates for ease of use. 
