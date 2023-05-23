@@ -1,5 +1,5 @@
 # To-do-list
-It's a training project. it's to-do list app. In it, you can add new things, edit, delete things and mark things as completed. You have opportunity to add a thing for today, for the future or without a date.
+It's my first training project. it's to-do list app. In it, you can add new things, edit, delete things and mark things as completed. You have opportunity to add a thing for today, for the future or without a date.
 
 The app is still being developed.
 
